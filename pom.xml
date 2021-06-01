@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+    <modules>
+        <module>adapters</module>
+        <module>mdw</module>
+        <module>main</module>
+        <module>commons</module>
+    </modules>
+    <groupId>com.hardware</groupId>
+    <artifactId>devices</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>devices</name>
+    <description>Devices CRUD</description>
+
+    <properties>
+        <java.version>11</java.version>
+        <spring-boot.version>2.2.6.RELEASE</spring-boot.version>
+        <flyway.version>6.3.3</flyway.version>
+        <postgres.version>42.2.12</postgres.version>
+        <jakarta.xml.bind-api.version>2.3.3</jakarta.xml.bind-api.version>
+        <lombok.version>1.18.12</lombok.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <retrofit.version>2.8.1</retrofit.version>
+        <assertj.version>3.15.0</assertj.version>
+        <mockito.version>3.3.3</mockito.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
+</project>
