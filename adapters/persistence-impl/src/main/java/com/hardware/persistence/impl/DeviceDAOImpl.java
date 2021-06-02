@@ -9,6 +9,8 @@ import com.hardware.persistence.impl.repositories.DeviceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class DeviceDAOImpl implements DeviceDAO {
@@ -24,6 +26,13 @@ public class DeviceDAOImpl implements DeviceDAO {
 
         final DeviceEntity savedEntity = deviceRepository.save(deviceToEntityConverter.convert(device));
         return entityToDeviceConverter.convert(savedEntity);
+    }
+
+    @Override
+    public Optional<Device> findById(long id) {
+
+        return deviceRepository.findById(id)
+                .map(entityToDeviceConverter::convert);
     }
 
 }

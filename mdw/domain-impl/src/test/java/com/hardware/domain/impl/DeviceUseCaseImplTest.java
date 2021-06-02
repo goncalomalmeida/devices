@@ -9,13 +9,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class CreateDeviceUseCaseImplTest {
+public class DeviceUseCaseImplTest {
 
     @Mock
     private DeviceDAO deviceDAO;
 
     @InjectMocks
-    private CreateDeviceUseCaseImpl subject;
+    private DeviceUseCaseImpl subject;
 
     @Test
     public void create_whenNameIsEmpty_throwsValidationException() {

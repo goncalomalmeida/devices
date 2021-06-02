@@ -1,12 +1,11 @@
-package com.hardware.persistence.api;
+package com.hardware.domain.api;
 
 import com.hardware.domain.catalog.Device;
 
 import java.util.Optional;
 
-public interface DeviceDAO {
+public interface GetDeviceUseCase {
 
-    Device create(Device device);
-
+    // TODO add javadoc
     Optional<Device> findById(long id);
 }

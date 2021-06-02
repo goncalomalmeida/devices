@@ -1,16 +1,17 @@
 package com.hardware.domain.impl;
 
 import com.hardware.domain.api.CreateDeviceUseCase;
+import com.hardware.domain.api.GetDeviceUseCase;
 import com.hardware.domain.catalog.Device;
 import com.hardware.domain.catalog.DeviceCreationRequest;
 import com.hardware.domain.impl.factories.DeviceFactory;
 import com.hardware.persistence.api.DeviceDAO;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+import java.util.Optional;
+
 @RequiredArgsConstructor
-public class CreateDeviceUseCaseImpl implements CreateDeviceUseCase {
+public class DeviceUseCaseImpl implements CreateDeviceUseCase, GetDeviceUseCase {
 
     private final DeviceDAO deviceDAO;
 
@@ -22,5 +23,11 @@ public class CreateDeviceUseCaseImpl implements CreateDeviceUseCase {
         final Device device = deviceFactory.instantiate(deviceCreationRequest.getName(), deviceCreationRequest.getBrand());
 
         return deviceDAO.create(device);
+    }
+
+    @Override
+    public Optional<Device> findById(long id) {
+
+        return deviceDAO.findById(id);
     }
 }
