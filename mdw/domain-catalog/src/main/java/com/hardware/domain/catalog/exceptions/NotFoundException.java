@@ -11,4 +11,9 @@ public class NotFoundException extends RuntimeException {
         super(description);
         this.description = description;
     }
+
+    public static NotFoundException deviceNotFoundException() {
+
+        return new NotFoundException("Device not found");
+    }
 }

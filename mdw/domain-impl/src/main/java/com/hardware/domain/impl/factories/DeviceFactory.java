@@ -6,8 +6,8 @@ import java.time.Instant;
 
 public class DeviceFactory {
 
-    public Device instantiate(String name, String brand) {
+    public Device instantiate(Long id, String name, String brand) {
 
-        return new Device(null, name, brand, Instant.now());
+        return new Device(id, name, brand, Instant.now());
     }
 }

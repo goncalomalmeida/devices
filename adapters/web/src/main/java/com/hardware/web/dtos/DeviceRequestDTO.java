@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Value
 @RequiredArgsConstructor
 @Builder(builderClassName = "Builder")
-public class DeviceRequest {
+public class DeviceRequestDTO {
 
     @NotBlank
     String name;

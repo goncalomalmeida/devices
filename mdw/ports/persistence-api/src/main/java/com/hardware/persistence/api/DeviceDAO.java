@@ -15,4 +15,7 @@ public interface DeviceDAO {
     List<Device> findAll(Page page, String brand);
 
     void delete(long id);
+
+    Device update(Device device);
+
 }

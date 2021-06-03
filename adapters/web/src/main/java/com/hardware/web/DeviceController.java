@@ -4,21 +4,25 @@ import com.hardware.domain.api.CreateDeviceUseCase;
 import com.hardware.domain.api.DeleteDeviceUseCase;
 import com.hardware.domain.api.GetDeviceUseCase;
 import com.hardware.domain.api.ListDevicesUseCase;
+import com.hardware.domain.api.UpdateDeviceUseCase;
 import com.hardware.domain.catalog.Device;
 import com.hardware.domain.catalog.Page;
+import com.hardware.domain.catalog.UpdateOperationOutcome;
 import com.hardware.domain.catalog.exceptions.NotFoundException;
-import com.hardware.web.converters.DeviceCreationRequestConverter;
+import com.hardware.web.converters.DeviceRequestConverter;
 import com.hardware.web.converters.DeviceResponseConverter;
-import com.hardware.web.dtos.DeviceRequest;
+import com.hardware.web.dtos.DeviceRequestDTO;
 import com.hardware.web.dtos.DeviceResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,17 +48,19 @@ public class DeviceController {
 
     private final ListDevicesUseCase listDevicesUseCase;
 
+    private final UpdateDeviceUseCase updateDeviceUseCase;
+
     private final DeleteDeviceUseCase deleteDeviceUseCase;
 
     private final DeviceResponseConverter deviceResponseConverter;
 
-    private final DeviceCreationRequestConverter deviceCreationRequestConverter;
+    private final DeviceRequestConverter deviceRequestConverter;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public DeviceResponse create(@Valid @RequestBody DeviceRequest deviceRequest) {
+    public DeviceResponse create(@Valid @RequestBody DeviceRequestDTO deviceRequestDTO) {
 
-        final Device device = createDeviceUseCase.create(deviceCreationRequestConverter.convert(deviceRequest));
+        final Device device = createDeviceUseCase.create(deviceRequestConverter.convert(deviceRequestDTO));
 
         return deviceResponseConverter.convert(device);
     }
@@ -64,7 +70,7 @@ public class DeviceController {
 
         return getDeviceUseCase.findById(id)
                 .map(deviceResponseConverter::convert)
-                .orElseThrow(() -> new NotFoundException("Device not found"));
+                .orElseThrow(NotFoundException::deviceNotFoundException);
     }
 
     @GetMapping
@@ -79,6 +85,18 @@ public class DeviceController {
                 .stream()
                 .map(deviceResponseConverter::convert)
                 .collect(Collectors.toList());
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Void> update(
+            @PathVariable long id,
+            @Valid @RequestBody DeviceRequestDTO deviceRequestDTO) {
+
+        UpdateOperationOutcome updateOperationOutcome = updateDeviceUseCase.update(id, deviceRequestConverter.convert(deviceRequestDTO));
+
+        HttpStatus httpStatus = UpdateOperationOutcome.CREATED.equals(updateOperationOutcome) ? HttpStatus.CREATED : HttpStatus.NO_CONTENT;
+
+        return new ResponseEntity<>(httpStatus);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

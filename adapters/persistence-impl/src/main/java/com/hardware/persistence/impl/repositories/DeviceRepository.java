@@ -8,6 +8,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DeviceRepository extends JpaRepository<DeviceEntity, Long>, JpaSpecificationExecutor<DeviceEntity> {
 
-    // FIXME
-    DeviceEntity findByName(String productName);
 }

@@ -8,9 +8,9 @@ import com.hardware.domain.api.GetDeviceUseCase;
 import com.hardware.domain.api.ListDevicesUseCase;
 import com.hardware.domain.catalog.Device;
 import com.hardware.domain.catalog.exceptions.NotFoundException;
-import com.hardware.web.converters.DeviceCreationRequestConverter;
+import com.hardware.web.converters.DeviceRequestConverter;
 import com.hardware.web.converters.DeviceResponseConverter;
-import com.hardware.web.dtos.DeviceRequest;
+import com.hardware.web.dtos.DeviceRequestDTO;
 import com.hardware.web.dtos.DeviceResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +59,7 @@ public class DeviceControllerTest {
     private DeviceResponseConverter deviceResponseConverter;
 
     @SpyBean
-    private DeviceCreationRequestConverter deviceCreationRequestConverter;
+    private DeviceRequestConverter deviceRequestConverter;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -84,7 +84,7 @@ public class DeviceControllerTest {
     public void create_whenBodyIsCorrect_returnsResponse() throws Exception {
 
         // given
-        DeviceRequest requestBody = new DeviceRequest("personal laptop", "samsung");
+        DeviceRequestDTO requestBody = new DeviceRequestDTO("personal laptop", "samsung");
         Device expectedDevice = new Device(5L, requestBody.getName(), requestBody.getBrand(), Instant.now());
 
         doReturn(expectedDevice)
@@ -149,7 +149,7 @@ public class DeviceControllerTest {
     public void findById_whenDeviceExists_returnsResponse() throws Exception {
 
         // given
-        DeviceRequest requestBody = new DeviceRequest("personal laptop", "samsung");
+        DeviceRequestDTO requestBody = new DeviceRequestDTO("personal laptop", "samsung");
         Device expectedDevice = new Device(5L, requestBody.getName(), requestBody.getBrand(), Instant.now());
 
         doReturn(Optional.of(expectedDevice))

@@ -4,6 +4,7 @@ import com.hardware.domain.api.CreateDeviceUseCase;
 import com.hardware.domain.api.DeleteDeviceUseCase;
 import com.hardware.domain.api.GetDeviceUseCase;
 import com.hardware.domain.api.ListDevicesUseCase;
+import com.hardware.domain.api.UpdateDeviceUseCase;
 import com.hardware.domain.impl.DeviceUseCaseImpl;
 import com.hardware.domain.impl.factories.DeviceFactory;
 import com.hardware.persistence.api.DeviceDAO;
@@ -33,6 +34,12 @@ public class DomainConfiguration {
 
     @Bean
     public ListDevicesUseCase listDevicesUseCase(DeviceDAO deviceDAO, DeviceFactory deviceFactory) {
+
+        return new DeviceUseCaseImpl(deviceDAO, deviceFactory);
+    }
+
+    @Bean
+    public UpdateDeviceUseCase updateDeviceUseCase(DeviceDAO deviceDAO, DeviceFactory deviceFactory) {
 
         return new DeviceUseCaseImpl(deviceDAO, deviceFactory);
     }
