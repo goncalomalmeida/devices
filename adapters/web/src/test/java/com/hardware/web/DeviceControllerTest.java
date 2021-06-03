@@ -182,7 +182,7 @@ public class DeviceControllerTest {
         // given
         doReturn(List.of())
                 .when(listDevicesUseCase)
-                .findAll(any());
+                .findAll(any(), any());
 
         // when
         final ResultActions get = mvc.perform(get("/v1/devices").contentType(MediaType.APPLICATION_JSON));
@@ -237,7 +237,7 @@ public class DeviceControllerTest {
 
         doReturn(List.of(deviceOne, deviceTwo))
                 .when(listDevicesUseCase)
-                .findAll(any());
+                .findAll(any(), any());
 
         // when
         final ResultActions get = mvc.perform(get("/v1/devices").contentType(MediaType.APPLICATION_JSON));

@@ -11,7 +11,9 @@ import com.hardware.persistence.impl.repositories.DeviceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,9 +43,16 @@ public class DeviceDAOImpl implements DeviceDAO {
     }
 
     @Override
-    public List<Device> findAll(Page page) {
+    public List<Device> findAll(Page page, String brand) {
 
-        return deviceRepository.findAll(PageRequest.of(page.getPageNumber(), page.getSize()))
+        Specification<DeviceEntity> brandSpecification = null;
+
+        if (!StringUtils.isEmpty(brand)) {
+            brandSpecification = (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("brand"), brand);
+        }
+
+        return deviceRepository.findAll(brandSpecification,
+                                        PageRequest.of(page.getPageNumber(), page.getSize()))
                 .map(entityToDeviceConverter::convert)
                 .toList();
     }

@@ -8,5 +8,5 @@ import java.util.List;
 public interface ListDevicesUseCase {
 
     // TODO add javadoc
-    List<Device> findAll(Page page);
+    List<Device> findAll(Page page, String brand);
 }

@@ -12,7 +12,7 @@ public interface DeviceDAO {
 
     Optional<Device> findById(long id);
 
-    List<Device> findAll(Page page);
+    List<Device> findAll(Page page, String brand);
 
     void delete(long id);
 }

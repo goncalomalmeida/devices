@@ -36,9 +36,9 @@ public class DeviceUseCaseImpl implements CreateDeviceUseCase, GetDeviceUseCase,
     }
 
     @Override
-    public List<Device> findAll(Page page) {
+    public List<Device> findAll(Page page, String brand) {
 
-        return deviceDAO.findAll(page);
+        return deviceDAO.findAll(page, brand);
     }
 
     @Override

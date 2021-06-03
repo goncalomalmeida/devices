@@ -69,14 +69,13 @@ public class DeviceController {
 
     @GetMapping
     public List<DeviceResponse> findAll(@RequestParam(name = "pageNumber", defaultValue = "0")
-                                        @Min(value = 0)
-                                                Integer pageNumber,
+                                        @Min(value = 0) Integer pageNumber,
                                         @RequestParam(name = "size", defaultValue = "10")
                                         @Max(value = 1000)
-                                        @Min(value = 0)
-                                                Integer size) {
+                                        @Min(value = 0) Integer size,
+                                        @RequestParam(name = "brand", required = false) String brand) {
 
-        return listDevicesUseCase.findAll(new Page(pageNumber, size))
+        return listDevicesUseCase.findAll(new Page(pageNumber, size), brand)
                 .stream()
                 .map(deviceResponseConverter::convert)
                 .collect(Collectors.toList());
