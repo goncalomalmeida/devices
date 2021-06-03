@@ -3,9 +3,11 @@ package com.hardware.web;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hardware.domain.api.CreateDeviceUseCase;
+import com.hardware.domain.api.DeleteDeviceUseCase;
 import com.hardware.domain.api.GetDeviceUseCase;
 import com.hardware.domain.api.ListDevicesUseCase;
 import com.hardware.domain.catalog.Device;
+import com.hardware.domain.catalog.exceptions.NotFoundException;
 import com.hardware.web.converters.DeviceCreationRequestConverter;
 import com.hardware.web.converters.DeviceResponseConverter;
 import com.hardware.web.dtos.DeviceRequest;
@@ -26,7 +28,10 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -46,6 +51,9 @@ public class DeviceControllerTest {
 
     @MockBean
     private ListDevicesUseCase listDevicesUseCase;
+
+    @MockBean
+    private DeleteDeviceUseCase deleteDeviceUseCase;
 
     @SpyBean
     private DeviceResponseConverter deviceResponseConverter;
@@ -218,5 +226,66 @@ public class DeviceControllerTest {
 
         // then
         get.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void findAll_whenThereAreDevices_returnsList() throws Exception {
+
+        // given
+        final Device deviceOne = new Device(1L, "name1", "brand1", Instant.now());
+        final Device deviceTwo = new Device(2L, "name2", "brand2", Instant.now());
+
+        doReturn(List.of(deviceOne, deviceTwo))
+                .when(listDevicesUseCase)
+                .findAll(any());
+
+        // when
+        final ResultActions get = mvc.perform(get("/v1/devices").contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        final String contentAsString = get.andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        final List<DeviceResponse> result = objectMapper.readValue(contentAsString, new TypeReference<>() {});
+
+        assertThat(result)
+                .isNotEmpty()
+                .hasSize(2)
+                .extracting(DeviceResponse::getName)
+                .containsExactly("name1", "name2");
+    }
+
+    @Test
+    public void delete_whenNotFound_returnsNotFound() throws Exception {
+
+        // given
+        long deviceId = 1L;
+
+        doThrow(new NotFoundException(""))
+                .when(deleteDeviceUseCase)
+                .delete(eq(deviceId));
+
+        // when
+        final ResultActions get = mvc.perform(delete("/v1/devices/{id}", deviceId)
+                                                      .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        get.andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void delete_whenFound_returnsNoContent() throws Exception {
+
+        // given
+        long deviceId = 1L;
+
+        // when
+        final ResultActions get = mvc.perform(delete("/v1/devices/{id}", deviceId)
+                                                      .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        get.andExpect(status().isNoContent());
     }
 }

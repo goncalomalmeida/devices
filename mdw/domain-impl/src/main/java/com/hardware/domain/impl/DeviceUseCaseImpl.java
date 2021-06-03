@@ -1,6 +1,7 @@
 package com.hardware.domain.impl;
 
 import com.hardware.domain.api.CreateDeviceUseCase;
+import com.hardware.domain.api.DeleteDeviceUseCase;
 import com.hardware.domain.api.GetDeviceUseCase;
 import com.hardware.domain.api.ListDevicesUseCase;
 import com.hardware.domain.catalog.Device;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class DeviceUseCaseImpl implements CreateDeviceUseCase, GetDeviceUseCase, ListDevicesUseCase {
+public class DeviceUseCaseImpl implements CreateDeviceUseCase, GetDeviceUseCase, ListDevicesUseCase, DeleteDeviceUseCase {
 
     private final DeviceDAO deviceDAO;
 
@@ -38,5 +39,11 @@ public class DeviceUseCaseImpl implements CreateDeviceUseCase, GetDeviceUseCase,
     public List<Device> findAll(Page page) {
 
         return deviceDAO.findAll(page);
+    }
+
+    @Override
+    public void delete(long id) {
+
+        deviceDAO.delete(id);
     }
 }

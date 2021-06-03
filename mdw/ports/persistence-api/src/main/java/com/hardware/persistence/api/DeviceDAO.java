@@ -13,4 +13,6 @@ public interface DeviceDAO {
     Optional<Device> findById(long id);
 
     List<Device> findAll(Page page);
+
+    void delete(long id);
 }

@@ -26,4 +26,5 @@ public class ErrorHandler {
         log.warn("Rest error", exception);
         return new ResponseEntity<>(new ErrorResponse(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
 }

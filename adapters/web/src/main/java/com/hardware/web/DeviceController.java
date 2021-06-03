@@ -1,6 +1,7 @@
 package com.hardware.web;
 
 import com.hardware.domain.api.CreateDeviceUseCase;
+import com.hardware.domain.api.DeleteDeviceUseCase;
 import com.hardware.domain.api.GetDeviceUseCase;
 import com.hardware.domain.api.ListDevicesUseCase;
 import com.hardware.domain.catalog.Device;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +43,8 @@ public class DeviceController {
     private final GetDeviceUseCase getDeviceUseCase;
 
     private final ListDevicesUseCase listDevicesUseCase;
+
+    private final DeleteDeviceUseCase deleteDeviceUseCase;
 
     private final DeviceResponseConverter deviceResponseConverter;
 
@@ -77,4 +81,12 @@ public class DeviceController {
                 .map(deviceResponseConverter::convert)
                 .collect(Collectors.toList());
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("{id}")
+    public void delete(@PathVariable long id) {
+
+        deleteDeviceUseCase.delete(id);
+    }
+
 }
