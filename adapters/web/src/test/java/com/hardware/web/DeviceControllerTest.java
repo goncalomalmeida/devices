@@ -1,8 +1,10 @@
 package com.hardware.web;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hardware.domain.api.CreateDeviceUseCase;
 import com.hardware.domain.api.GetDeviceUseCase;
+import com.hardware.domain.api.ListDevicesUseCase;
 import com.hardware.domain.catalog.Device;
 import com.hardware.web.converters.DeviceCreationRequestConverter;
 import com.hardware.web.converters.DeviceResponseConverter;
@@ -18,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,6 +43,9 @@ public class DeviceControllerTest {
 
     @MockBean
     private GetDeviceUseCase getDeviceUseCase;
+
+    @MockBean
+    private ListDevicesUseCase listDevicesUseCase;
 
     @SpyBean
     private DeviceResponseConverter deviceResponseConverter;
@@ -84,7 +90,7 @@ public class DeviceControllerTest {
                         .contentType(MediaType.APPLICATION_JSON));
 
         // then
-        final String contentAsString = post.andExpect(status().isOk())
+        final String contentAsString = post.andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andReturn()
                 .getResponse()
@@ -160,5 +166,57 @@ public class DeviceControllerTest {
         assertThat(deviceResponse.getId()).isEqualTo(expectedDevice.getId());
         assertThat(deviceResponse.getName()).isEqualTo(expectedDevice.getName());
         assertThat(deviceResponse.getBrand()).isEqualTo(expectedDevice.getBrand());
+    }
+
+    @Test
+    public void findAll_whenEmptyDataSet_returnsEmptyList() throws Exception {
+
+        // given
+        doReturn(List.of())
+                .when(listDevicesUseCase)
+                .findAll(any());
+
+        // when
+        final ResultActions get = mvc.perform(get("/v1/devices").contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        final String contentAsString = get.andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        final List<DeviceResponse> result = objectMapper.readValue(contentAsString, new TypeReference<>() {});
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    public void findAll_whenSizeIsTooHigh_returnsBadRequest() throws Exception {
+
+        // given
+        int size = Integer.MAX_VALUE;
+
+        // when
+        final ResultActions get = mvc.perform(get("/v1/devices")
+                                                      .param("size", String.valueOf(size))
+                                                      .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        get.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void findAll_whenSizeIsTooLow_returnsBadRequest() throws Exception {
+
+        // given
+        int size = -Integer.MAX_VALUE;
+
+        // when
+        final ResultActions get = mvc.perform(get("/v1/devices")
+                                                      .param("size", String.valueOf(size))
+                                                      .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        get.andExpect(status().isBadRequest());
     }
 }

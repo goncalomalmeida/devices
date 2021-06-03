@@ -1,14 +1,17 @@
 package com.hardware.persistence.impl;
 
 import com.hardware.domain.catalog.Device;
+import com.hardware.domain.catalog.Page;
 import com.hardware.persistence.api.DeviceDAO;
 import com.hardware.persistence.impl.converters.DeviceToEntityConverter;
 import com.hardware.persistence.impl.converters.EntityToDeviceConverter;
 import com.hardware.persistence.impl.entities.DeviceEntity;
 import com.hardware.persistence.impl.repositories.DeviceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -33,6 +36,14 @@ public class DeviceDAOImpl implements DeviceDAO {
 
         return deviceRepository.findById(id)
                 .map(entityToDeviceConverter::convert);
+    }
+
+    @Override
+    public List<Device> findAll(Page page) {
+
+        return deviceRepository.findAll(PageRequest.of(page.getPageNumber(), page.getSize()))
+                .map(entityToDeviceConverter::convert)
+                .toList();
     }
 
 }

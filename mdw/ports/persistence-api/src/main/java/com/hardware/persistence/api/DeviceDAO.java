@@ -1,7 +1,9 @@
 package com.hardware.persistence.api;
 
 import com.hardware.domain.catalog.Device;
+import com.hardware.domain.catalog.Page;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface DeviceDAO {
@@ -9,4 +11,6 @@ public interface DeviceDAO {
     Device create(Device device);
 
     Optional<Device> findById(long id);
+
+    List<Device> findAll(Page page);
 }
