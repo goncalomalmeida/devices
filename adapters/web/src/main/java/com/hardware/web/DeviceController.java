@@ -11,8 +11,10 @@ import com.hardware.domain.catalog.UpdateOperationOutcome;
 import com.hardware.domain.catalog.exceptions.NotFoundException;
 import com.hardware.web.converters.DeviceRequestConverter;
 import com.hardware.web.converters.DeviceResponseConverter;
+import com.hardware.web.converters.DeviceUpdateConverter;
 import com.hardware.web.dtos.DeviceRequestDTO;
 import com.hardware.web.dtos.DeviceResponse;
+import com.hardware.web.dtos.DeviceUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -55,6 +58,8 @@ public class DeviceController {
     private final DeviceResponseConverter deviceResponseConverter;
 
     private final DeviceRequestConverter deviceRequestConverter;
+
+    private final DeviceUpdateConverter deviceUpdateConverter;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -97,6 +102,16 @@ public class DeviceController {
         HttpStatus httpStatus = UpdateOperationOutcome.CREATED.equals(updateOperationOutcome) ? HttpStatus.CREATED : HttpStatus.NO_CONTENT;
 
         return new ResponseEntity<>(httpStatus);
+    }
+
+    @PatchMapping("{id}")
+    public DeviceResponse partialUpdate(
+            @PathVariable long id,
+            @Valid @RequestBody(required = false) DeviceUpdateDTO deviceUpdateDTO) {
+
+        final Device device = updateDeviceUseCase.partialUpdate(id, deviceUpdateConverter.convert(deviceUpdateDTO));
+
+        return deviceResponseConverter.convert(device);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

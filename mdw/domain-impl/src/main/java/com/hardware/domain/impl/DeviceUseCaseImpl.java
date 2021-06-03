@@ -9,6 +9,7 @@ import com.hardware.domain.catalog.Device;
 import com.hardware.domain.catalog.DeviceRequest;
 import com.hardware.domain.catalog.Page;
 import com.hardware.domain.catalog.UpdateOperationOutcome;
+import com.hardware.domain.catalog.exceptions.NotFoundException;
 import com.hardware.domain.impl.factories.DeviceFactory;
 import com.hardware.persistence.api.DeviceDAO;
 import lombok.RequiredArgsConstructor;
@@ -71,6 +72,23 @@ public class DeviceUseCaseImpl implements CreateDeviceUseCase,
         }
 
         return result;
+    }
+
+    @Override
+    public Device partialUpdate(long id, DeviceRequest deviceRequest) {
+
+        return findById(id)
+                .map(device -> merge(device, deviceRequest))
+                .map(deviceDAO::update)
+                .orElseThrow(NotFoundException::deviceNotFoundException);
+    }
+
+    private Device merge(Device device, DeviceRequest deviceRequest) {
+
+        return device.toBuilder()
+                .brand(Optional.ofNullable(deviceRequest.getBrand()).orElse(device.getBrand()))
+                .name(Optional.ofNullable(deviceRequest.getName()).orElse(device.getName()))
+                .build();
     }
 
     private Device createInternal(Long predefinedId, DeviceRequest deviceRequest) {
