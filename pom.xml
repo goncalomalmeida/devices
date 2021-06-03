@@ -28,6 +28,7 @@
         <mockito.version>3.3.3</mockito.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <springdoc-openapi-ui.version>1.5.2</springdoc-openapi-ui.version>
     </properties>
 
 </project>
