@@ -53,7 +53,7 @@ public class DeviceUseCaseImpl implements CreateDeviceUseCase,
     }
 
     @Override
-    public UpdateOperationOutcome update(long id, DeviceRequest deviceRequest) {
+    public UpdateOperationOutcome upsert(long id, DeviceRequest deviceRequest) {
 
         UpdateOperationOutcome result;
 

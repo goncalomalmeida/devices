@@ -93,11 +93,11 @@ public class DeviceController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> update(
+    public ResponseEntity<Void> upsert(
             @PathVariable long id,
             @Valid @RequestBody DeviceRequestDTO deviceRequestDTO) {
 
-        UpdateOperationOutcome updateOperationOutcome = updateDeviceUseCase.update(id, deviceRequestConverter.convert(deviceRequestDTO));
+        UpdateOperationOutcome updateOperationOutcome = updateDeviceUseCase.upsert(id, deviceRequestConverter.convert(deviceRequestDTO));
 
         HttpStatus httpStatus = UpdateOperationOutcome.CREATED.equals(updateOperationOutcome) ? HttpStatus.CREATED : HttpStatus.NO_CONTENT;
 

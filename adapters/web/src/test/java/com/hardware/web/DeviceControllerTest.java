@@ -268,7 +268,7 @@ public class DeviceControllerTest {
     }
 
     @Test
-    public void update_whenBodyIsInvalid_returnsBadRequest() throws Exception {
+    public void upsert_whenBodyIsInvalid_returnsBadRequest() throws Exception {
 
         // given
         long deviceId = 1L;
@@ -284,7 +284,7 @@ public class DeviceControllerTest {
     }
 
     @Test
-    public void update_whenEntityIsUpdated_returnsNoContent() throws Exception {
+    public void upsert_whenEntityIsUpdated_returnsNoContent() throws Exception {
 
         // given
         long deviceId = 1L;
@@ -292,7 +292,7 @@ public class DeviceControllerTest {
 
         doReturn(UpdateOperationOutcome.UPDATED)
                 .when(updateDeviceUseCase)
-                .update(anyLong(), any());
+                .upsert(anyLong(), any());
 
         // when
         final ResultActions put = mvc.perform(put("/v1/devices/{id}", deviceId)
@@ -304,7 +304,7 @@ public class DeviceControllerTest {
     }
 
     @Test
-    public void update_whenEntityIsCreated_returnsCreated() throws Exception {
+    public void upsert_whenEntityIsCreated_returnsCreated() throws Exception {
 
         // given
         long deviceId = 1L;
@@ -312,7 +312,7 @@ public class DeviceControllerTest {
 
         doReturn(UpdateOperationOutcome.CREATED)
                 .when(updateDeviceUseCase)
-                .update(anyLong(), any());
+                .upsert(anyLong(), any());
 
         // when
         final ResultActions put = mvc.perform(put("/v1/devices/{id}", deviceId)

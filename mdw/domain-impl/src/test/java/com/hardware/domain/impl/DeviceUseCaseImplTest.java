@@ -34,7 +34,7 @@ public class DeviceUseCaseImplTest {
     private DeviceUseCaseImpl subject;
 
     @Test
-    public void update_whenDeviceDoesNotExist_returnsCreatedOutcome() {
+    public void upsert_whenDeviceDoesNotExist_returnsCreatedOutcome() {
 
         // given
         long id = 1L;
@@ -44,7 +44,7 @@ public class DeviceUseCaseImplTest {
                 .findById(eq(id));
 
         // when
-        final UpdateOperationOutcome result = subject.update(id, deviceRequest);
+        final UpdateOperationOutcome result = subject.upsert(id, deviceRequest);
 
         // then
         assertThat(result)
@@ -54,7 +54,7 @@ public class DeviceUseCaseImplTest {
     }
 
     @Test
-    public void update_whenDeviceAlreadyExists_returnsUpdatedOutcome() {
+    public void upsert_whenDeviceAlreadyExists_returnsUpdatedOutcome() {
 
         // given
         long id = 1L;
@@ -65,7 +65,7 @@ public class DeviceUseCaseImplTest {
                 .findById(eq(id));
 
         // when
-        final UpdateOperationOutcome result = subject.update(id, deviceRequest);
+        final UpdateOperationOutcome result = subject.upsert(id, deviceRequest);
 
         // then
         assertThat(result)
