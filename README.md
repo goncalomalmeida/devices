@@ -41,11 +41,10 @@ to maintain.
 * Using an in-memory database for tests (ideally we would set up a docker)
 
 # Possible improvements
+* Docker for building an image as opposed to having to install Java 11
 * More error handling on API calls
 * Add full test coverage
 * Javadoc
 * More & better OpenAPI documentation
 * Authentication/authorization
 * Add an index to the 'brand' column for better performance
-
-
