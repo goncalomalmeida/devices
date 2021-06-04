@@ -1,7 +1,10 @@
+# Requirements
+* Java 11
+
 # How to build
 This app is built on Java 11 so it needs to be installed locally.
 
-I'm using maven as a built tool so just run the following command at the root:
+I'm using maven as a build tool so just run the following command at the root:
 
 ```./mvnw -q clean install -DskipTests=true```
 
