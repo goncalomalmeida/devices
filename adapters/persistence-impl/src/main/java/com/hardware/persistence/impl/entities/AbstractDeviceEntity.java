@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Getter
@@ -12,13 +13,16 @@ import java.time.Instant;
 @MappedSuperclass
 public abstract class AbstractDeviceEntity {
 
-    @Column(name = "name")
+    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "brand")
+    @NotNull
+    @Column(name = "brand", nullable = false)
     private String brand;
 
-    @Column(name = "creation_time", nullable = false)
+    @NotNull
+    @Column(name = "creation_time", nullable = false, updatable = false)
     private Instant creationTime;
 
     public abstract long getId();

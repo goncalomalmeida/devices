@@ -38,6 +38,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
+        </dependency>
+
+        <dependency>
             <artifactId>commons</artifactId>
             <groupId>com.hardware</groupId>
             <version>0.0.1-SNAPSHOT</version>
